@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fabrique N'EPS</title>
+<meta name="description" content="Concevoir sa propre appli de suivi EPS (tablette enseignant ↔ tablettes élèves par QR codes) – N'EPS numérique">
+<meta name="theme-color" content="#0062C4">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Fabrique N'EPS">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="stylesheet" href="moteur/styles.css">
+<link rel="stylesheet" href="fabrique.css">
+</head>
+<body>
+<header id="topbar">
+  <img class="fab-logo" src="icons/icon-192.png" alt="Fabrique N'EPS">
+  <div class="tb-title"><div id="tb-main">Fabrique N'EPS</div><div id="tb-sub">Créer son appli d'EPS sans programmer</div></div>
+  <button class="btn small prev-toggle" data-a="togglePrev">📱 Aperçu</button>
+</header>
+<div id="proj-bar" class="proj-bar"></div>
+<div class="layout">
+  <section class="editor"><nav id="steps" class="steps"></nav><main id="main"></main></section>
+  <aside class="preview-pane">
+    <div class="prev-head"><b>Aperçu</b><span class="muted">votre appli comme sur une tablette · espace enseignant ouvert (code 0000 en vrai)</span>
+      <div class="btn-row"><button class="btn small" data-a="reloadPrev">↻</button><button class="btn small" data-a="demo">🧪 Classe de démo</button><button class="btn small ghost" data-a="resetPrev">🗑 Vider</button><button class="btn small ghost prev-close" data-a="togglePrev">✕</button></div></div>
+    <div class="device"><iframe id="preview" title="Aperçu de l'appli" allow="camera"></iframe></div>
+  </aside>
+</div>
+<div id="signature"><b>Quentin Delisle</b> · N'EPS</div>
+<div id="fab-version" class="fab-version"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<div id="modal-root"></div>
+<script src="banque.js"></script>
+<script src="modeles.js"></script>
+<script src="fabrique.js"></script>
+</body>
+</html>

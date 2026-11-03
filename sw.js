@@ -1,0 +1,22 @@
+/* Service worker – Fabrique N'EPS – Quentin Delisle
+   Réseau d'abord, cache si hors-ligne. Le moteur et ses bibliothèques sont mis en cache
+   pour que l'export .zip fonctionne aussi sans connexion. Mise à jour : changer CACHE. */
+const CACHE = 'fabrique-neps-v2.0.0';
+const ASSETS = ['./', './index.html', './fabrique.js', './fabrique.css', './modeles.js', './manifest.webmanifest',
+  './icons/icon-180.png', './icons/icon-192.png', './icons/icon-512.png', './icons/icon-maskable-512.png',
+  './banque.js', './icons/logo-fabrique.jpg', './moteur/index.html', './moteur/app.js', './moteur/outils.js', './moteur/styles.css', './moteur/config.js',
+  './moteur/icons/icon-180.png', './moteur/icons/icon-192.png', './moteur/icons/icon-512.png',
+  './moteur/lib/qrcode.js', './moteur/lib/jsQR.js', './moteur/lib/zxing-reader.js', './moteur/lib/zxing_reader.wasm', './moteur/lib/xlsx.full.min.js',
+  ...["./banque/apsa/CA1-biathlon-adapte.png", "./banque/apsa/CA1-biathlon.png", "./banque/apsa/CA1-boccia-adapte.png", "./banque/apsa/CA1-cens-adapte.png", "./banque/apsa/CA1-combine-athletique.png", "./banque/apsa/CA1-course-nature.png", "./banque/apsa/CA1-cross-training.png", "./banque/apsa/CA1-demi-fond-adapte.png", "./banque/apsa/CA1-demi-fond.png", "./banque/apsa/CA1-haies-adapte.png", "./banque/apsa/CA1-haies.png", "./banque/apsa/CA1-lancers.png", "./banque/apsa/CA1-laser-run.png", "./banque/apsa/CA1-marche-adapte.png", "./banque/apsa/CA1-natation-vitesse-adapte.png", "./banque/apsa/CA1-natation-vitesse.png", "./banque/apsa/CA1-relais-adapte.png", "./banque/apsa/CA1-relais.png", "./banque/apsa/CA1-run-bike.png", "./banque/apsa/CA1-sarbacane-adapte.png", "./banque/apsa/CA1-sauts-adapte.png", "./banque/apsa/CA1-sauts.png", "./banque/apsa/CA1-triathlon-athletique.png", "./banque/apsa/CA2-activites-nautiques.png", "./banque/apsa/CA2-biathlon-co-tir-arc.png", "./banque/apsa/CA2-cens-adapte.png", "./banque/apsa/CA2-course-orientation-adapte.png", "./banque/apsa/CA2-course-orientation.png", "./banque/apsa/CA2-escalade-adapte.png", "./banque/apsa/CA2-escalade.png", "./banque/apsa/CA2-golf.png", "./banque/apsa/CA2-sauvetage-aquatique-adapte.png", "./banque/apsa/CA2-sauvetage-aquatique.png", "./banque/apsa/CA2-vtt.png", "./banque/apsa/CA3-acrosport-adapte.png", "./banque/apsa/CA3-acrosport.png", "./banque/apsa/CA3-arts-du-cirque.png", "./banque/apsa/CA3-danse.png", "./banque/apsa/CA3-double-dutch.png", "./banque/apsa/CA3-gymnastique.png", "./banque/apsa/CA3-patinage.png", "./banque/apsa/CA3-step.png", "./banque/apsa/CA4-badminton-adapte.png", "./banque/apsa/CA4-badminton.png", "./banque/apsa/CA4-balle-roulee-adapte.png", "./banque/apsa/CA4-baseball-theque.png", "./banque/apsa/CA4-basket-ball-adapte.png", "./banque/apsa/CA4-basket-ball.png", "./banque/apsa/CA4-baskin-adapte.png", "./banque/apsa/CA4-boccia-adapte.png", "./banque/apsa/CA4-boxe-francaise.png", "./banque/apsa/CA4-football.png", "./banque/apsa/CA4-futsal.png", "./banque/apsa/CA4-handball.png", "./banque/apsa/CA4-judo.png", "./banque/apsa/CA4-lutte.png", "./banque/apsa/CA4-rugby.png", "./banque/apsa/CA4-tchoukball.png", "./banque/apsa/CA4-tennis-de-table.png", "./banque/apsa/CA4-ultimate-adapte.png", "./banque/apsa/CA4-ultimate.png", "./banque/apsa/CA4-volley-ball.png", "./banque/apsa/CA5-biathlon-longue-duree.png", "./banque/apsa/CA5-course-en-duree-adapte.png", "./banque/apsa/CA5-course-en-duree.png", "./banque/apsa/CA5-cross-training.png", "./banque/apsa/CA5-musculation-adapte.png", "./banque/apsa/CA5-musculation.png", "./banque/apsa/CA5-natation-en-duree.png", "./banque/apsa/CA5-ppg.png", "./banque/apsa/CA5-step-adapte.png", "./banque/apsa/CA5-step.png", "./banque/apsa/CA5-yoga.png"]];
+self.addEventListener('install', e => {
+  e.waitUntil(caches.open(CACHE).then(c => Promise.all(ASSETS.map(u => fetch(u, { cache:'reload' }).then(r => r.ok && c.put(u, r)).catch(()=>{})))).then(() => self.skipWaiting()));
+});
+self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim())); });
+self.addEventListener('fetch', e => {
+  const url = new URL(e.request.url);
+  if (e.request.method !== 'GET' || url.origin !== location.origin) return;
+  e.respondWith(fetch(e.request.url, { cache:'no-cache' }).then(resp => {
+    if (resp.ok) { const cl = resp.clone(); caches.open(CACHE).then(c => c.put(e.request, cl)); }
+    return resp;
+  }).catch(() => caches.match(e.request, { ignoreSearch: true }).then(r => r || caches.match('./index.html'))));
+});

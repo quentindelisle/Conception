@@ -1,0 +1,17 @@
+{
+  "name": "Fabrique N'EPS – concevoir son appli EPS",
+  "short_name": "Fabrique N'EPS",
+  "description": "Concevoir sa propre appli de suivi EPS (QR codes tablette enseignant ↔ tablettes élèves) – Quentin Delisle",
+  "lang": "fr",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#F2F9FE",
+  "theme_color": "#0062C4",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
